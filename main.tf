@@ -59,6 +59,21 @@ resource "kubernetes_secret" "azure_client_secret" {
   ]
 }
 
+resource "kubernetes_secret" "cloudflare_secret" {
+  metadata {
+    name      = "cloudflare-client-secret"
+    namespace = "${var.helm_namespace}"
+  }
+
+  data = {
+    apikey = "${var.cloudflare_apikey}"
+  }
+
+  depends_on = [
+    "null_resource.dependency_getter",
+  ]
+}
+
 resource "local_file" "issuer_letsencrypt_staging" {
   content = "${templatefile("${path.module}/config/issuer-letsencrypt-staging.yaml", {
     letsencrypt_email            = "${var.letsencrypt_email}"
@@ -99,6 +114,7 @@ resource "local_file" "issuer_letsencrypt" {
     azure_tenant_id              = "${var.azure_tenant_id}"
     azure_resource_group_name    = "${var.azure_resource_group_name}"
     azure_zone_name              = "${var.azure_zone_name}"
+    solver = var.solver
   })}"
 
   filename = "${path.module}/issuer-letsencrypt.yaml"

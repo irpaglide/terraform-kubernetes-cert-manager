@@ -24,6 +24,12 @@ spec:
             tenantID: ${ azure_tenant_id }
             resourceGroupName: ${ azure_resource_group_name }
             hostedZoneName: ${ azure_zone_name }
-        selector:
-          matchLabels:
-            'use-azuredns-solver': 'true'
+          cloudflare:
+            email: ${cloudflare_email}
+            apiKeySecretRef:
+              name: ${solver}-apikey-secret
+              key: apikey
+          selector:
+            matchLabels:
+              'use-${solver}-solver': 'true'
+               
