@@ -4,7 +4,7 @@ variable "chart_version" {}
 
 variable "values" {
   default = ""
-  type    = "string"
+  type    = string
 }
 
 variable "letsencrypt_email" {}
@@ -18,5 +18,5 @@ variable "cloudflare_email" {
 }
 
 variable "dependencies" {
-  type = "list"
+  type = list
 }
