@@ -59,14 +59,27 @@ resource "kubernetes_secret" "cloudflare_secret" {
   ]
 }
 
-resource "local_file" "issuer_letsencrypt_staging" {
-  content = templatefile("${path.module}/config/issuer-letsencrypt-staging.yaml",
+data "template_file" "letsencrypt_staging" {
+  template = file("${path.module}/config/issuer-letsencrypt-staging.yaml")
+  vars = {
     letsencrypt_email            = var.letsencrypt_email
-    cloudflare_api_key_secret = kubernetes_secret.cloudflare_secret.metadata.0.name)"
-
-  filename = "${path.module}/issuer-letsencrypt-staging.yaml"
+    cloudflare_api_key_secret    = kubernetes_secret.cloudflare_secret.metadata.0.name
+  }
 }
 
+data "template_file" "letsencrypt" {
+  template = file("${path.module}/config/issuer-letsencrypt.yaml")
+  vars = {
+    letsencrypt_email            = var.letsencrypt_email
+    cloudflare_api_key_secret    = kubernetes_secret.cloudflare_secret.metadata.0.name
+  }
+}
+
+resource "local_file" "issuer_letsencrypt_staging" {
+  content =   data.template_file.letsencrypt_staging.rendered
+  filename = "${path.module}/issuer-letsencrypt-staging.yaml"
+}
+  
 
 resource "null_resource" "issuer_letsencrypt_staging" {
   triggers = {
@@ -85,9 +98,7 @@ resource "null_resource" "issuer_letsencrypt_staging" {
 }
 
 resource "local_file" "issuer_letsencrypt" {
-  content = templatefile("${path.module}/config/issuer-letsencrypt.yaml",
-    letsencrypt_email             = var.letsencrypt_email
-    cloudflare_api_key_secret     = kubernetes_secret.cloudflare_secret.metadata.0.name)
+    content =   data.template_file.letsencrypt.rendered
     filename = "${path.module}/issuer-letsencrypt.yaml"
 }
 
