@@ -35,7 +35,7 @@ resource "helm_release" "cert_manager" {
   depends_on = [null_resource.dependency_getter, null_resource.apply_crds]
   name       = "cert-manager"
   repository = var.helm_repository
-  chart      = "stable/cert-manager"
+  chart      = "cert-manager"
   version    = "v${var.chart_version}"
   namespace  = var.helm_namespace
 
