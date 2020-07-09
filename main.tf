@@ -60,10 +60,9 @@ resource "kubernetes_secret" "cloudflare_secret" {
 }
 
 resource "local_file" "issuer_letsencrypt_staging" {
-  content = templatefile("${path.module}/config/issuer-letsencrypt-staging.yaml", {
+  content = templatefile("${path.module}/config/issuer-letsencrypt-staging.yaml",
     letsencrypt_email            = var.letsencrypt_email
-    cloudflare_api_key_secret = kubernetes_secret.cloudflare_secret.metadata.0.name
-  })"
+    cloudflare_api_key_secret = kubernetes_secret.cloudflare_secret.metadata.0.name)"
 
   filename = "${path.module}/issuer-letsencrypt-staging.yaml"
 }
@@ -86,12 +85,10 @@ resource "null_resource" "issuer_letsencrypt_staging" {
 }
 
 resource "local_file" "issuer_letsencrypt" {
-  content = templatefile("${path.module}/config/issuer-letsencrypt.yaml", {
-    letsencrypt_email            = "${var.letsencrypt_email}"
-    cloudflare_api_key_secret = "${kubernetes_secret.cloudflare_secret.metadata.0.name}"    
-  })
-
-  filename = "${path.module}/issuer-letsencrypt.yaml"
+  content = templatefile("${path.module}/config/issuer-letsencrypt.yaml",
+    letsencrypt_email             = var.letsencrypt_email
+    cloudflare_api_key_secret     = kubernetes_secret.cloudflare_secret.metadata.0.name)
+    filename = "${path.module}/issuer-letsencrypt.yaml"
 }
 
 
