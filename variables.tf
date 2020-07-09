@@ -1,6 +1,8 @@
 variable "helm_namespace" {}
 variable "helm_repository" {}
-variable "chart_version" {}
+variable "chart_version" {
+	default = "0.16.0-alpha.0"
+}
 
 variable "values" {
   default = ""
