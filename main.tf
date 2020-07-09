@@ -47,11 +47,11 @@ resource "helm_release" "cert_manager" {
 resource "kubernetes_secret" "cloudflare_secret" {
   metadata {
     name      = "cloudflare-api-key"
-    namespace = "${var.helm_namespace}"
+    namespace = var.helm_namespace
   }
 
   data = {
-    apikey = "${var.cloudflare_apikey}"
+    apikey = var.cloudflare_apikey
   }
 
   depends_on = [
@@ -60,10 +60,10 @@ resource "kubernetes_secret" "cloudflare_secret" {
 }
 
 resource "local_file" "issuer_letsencrypt_staging" {
-  content = "${templatefile("${path.module}/config/issuer-letsencrypt-staging.yaml", {
-    letsencrypt_email            = "${var.letsencrypt_email}"
-    cloudflare_api_key_secret = "${kubernetes_secret.cloudflare_secret.metadata.0.name}"
-  })}"
+  content = templatefile("${path.module}/config/issuer-letsencrypt-staging.yaml", {
+    letsencrypt_email            = var.letsencrypt_email
+    cloudflare_api_key_secret = kubernetes_secret.cloudflare_secret.metadata.0.name
+  })"
 
   filename = "${path.module}/issuer-letsencrypt-staging.yaml"
 }
@@ -86,10 +86,10 @@ resource "null_resource" "issuer_letsencrypt_staging" {
 }
 
 resource "local_file" "issuer_letsencrypt" {
-  content = "${templatefile("${path.module}/config/issuer-letsencrypt.yaml", {
+  content = templatefile("${path.module}/config/issuer-letsencrypt.yaml", {
     letsencrypt_email            = "${var.letsencrypt_email}"
     cloudflare_api_key_secret = "${kubernetes_secret.cloudflare_secret.metadata.0.name}"    
-  })}"
+  })
 
   filename = "${path.module}/issuer-letsencrypt.yaml"
 }
