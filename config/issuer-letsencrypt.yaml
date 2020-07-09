@@ -20,6 +20,6 @@ spec:
             apiKeySecretRef:
               name: ${cloudflare_api_key_secret}
               key: apikey
-          selector:
-            matchLabels:
-              'use-cloudflare-solver': 'true'
+        selector:
+          matchLabels:
+            'use-cloudflare-solver': 'true'
