@@ -27,20 +27,20 @@ resource "null_resource" "apply_crds" {
   }
 
   depends_on = [
-    "null_resource.dependency_getter",
+    null_resource.dependency_getter
   ]
 }
 
 resource "helm_release" "cert_manager" {
   depends_on = ["null_resource.dependency_getter", "null_resource.apply_crds"]
   name       = "cert-manager"
-  repository = "${var.helm_repository}"
+  repository = var.helm_repository
   chart      = "cert-manager"
   version    = "v${var.chart_version}"
-  namespace  = "${var.helm_namespace}"
+  namespace  = var.helm_namespace
 
   values = [
-    "${var.values}",
+    var.values
   ]
 }
 
@@ -55,7 +55,7 @@ resource "kubernetes_secret" "cloudflare_secret" {
   }
 
   depends_on = [
-    "null_resource.dependency_getter",
+    null_resource.dependency_getter
   ]
 }
 
@@ -79,9 +79,9 @@ resource "null_resource" "issuer_letsencrypt_staging" {
   }
 
   depends_on = [
-    "null_resource.dependency_getter",
-    "helm_release.cert_manager",
-    "local_file.issuer_letsencrypt_staging"
+    null_resource.dependency_getter,
+    helm_release.cert_manager,
+    local_file.issuer_letsencrypt_staging
   ]
 }
 
@@ -105,9 +105,9 @@ resource "null_resource" "issuer_letsencrypt" {
   }
 
   depends_on = [
-    "null_resource.dependency_getter",
-    "helm_release.cert_manager",
-    "local_file.issuer_letsencrypt"
+    null_resource.dependency_getter,
+    helm_release.cert_manager,
+    local_file.issuer_letsencrypt_staging
   ]
 }
 
@@ -118,6 +118,6 @@ resource "null_resource" "dependency_setter" {
   # https://github.com/hashicorp/terraform/issues/1178#issuecomment-449158607
   # List resource(s) that will be constructed last within the module.
   depends_on = [
-    "helm_release.cert_manager"
+    helm_release.cert_manager
   ]
 }
