@@ -62,6 +62,7 @@ resource "kubernetes_secret" "cloudflare_secret" {
 data "template_file" "letsencrypt_staging" {
   template = file("${path.module}/config/issuer-letsencrypt-staging.yaml")
   vars = {
+    cloudflare_email             = var.cloudflare_email
     letsencrypt_email            = var.letsencrypt_email
     cloudflare_api_key_secret    = kubernetes_secret.cloudflare_secret.metadata.0.name
   }
@@ -70,6 +71,7 @@ data "template_file" "letsencrypt_staging" {
 data "template_file" "letsencrypt" {
   template = file("${path.module}/config/issuer-letsencrypt.yaml")
   vars = {
+    cloudflare_email             = var.cloudflare_email
     letsencrypt_email            = var.letsencrypt_email
     cloudflare_api_key_secret    = kubernetes_secret.cloudflare_secret.metadata.0.name
   }
