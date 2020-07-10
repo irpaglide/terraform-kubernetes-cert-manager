@@ -22,3 +22,5 @@ variable "cloudflare_email" {
 variable "dependencies" {
   type = list
 }
+
+variable "cloudflare_zone" {}

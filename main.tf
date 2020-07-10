@@ -65,6 +65,7 @@ data "template_file" "letsencrypt_staging" {
     cloudflare_email             = var.cloudflare_email
     letsencrypt_email            = var.letsencrypt_email
     cloudflare_api_key_secret    = kubernetes_secret.cloudflare_secret.metadata.0.name
+    cloudflare_zone              = var.cloudflare_zone
   }
 }
 
@@ -74,6 +75,7 @@ data "template_file" "letsencrypt" {
     cloudflare_email             = var.cloudflare_email
     letsencrypt_email            = var.letsencrypt_email
     cloudflare_api_key_secret    = kubernetes_secret.cloudflare_secret.metadata.0.name
+    cloudflare_zone              = var.cloudflare_zone
   }
 }
 

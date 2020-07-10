@@ -15,11 +15,14 @@ spec:
     solvers:
       # Here we define a list of DNS-01 providers that can solve DNS challenges
       - dns01:
+          cnameStrategy: Follow
           cloudflare:
             email: ${cloudflare_email}
             apiKeySecretRef:
               name: ${cloudflare_api_key_secret}
               key: apikey
         selector:
+          dnsZones:
+            - '${cloudflare_zone}'
           matchLabels:
             'use-cloudflare-solver': 'true'
