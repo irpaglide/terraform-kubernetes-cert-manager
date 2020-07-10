@@ -24,5 +24,3 @@ spec:
         selector:
           dnsZones:
             - '${cloudflare_zone}'
-          matchLabels:
-            'use-cloudflare-solver': 'true'

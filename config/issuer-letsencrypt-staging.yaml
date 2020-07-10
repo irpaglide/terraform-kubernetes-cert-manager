@@ -23,7 +23,4 @@ spec:
               key: apikey
         selector:
           dnsZones:
-            - '${cloudflare_zone}'
-          matchLabels:
-            'use-cloudflare-solver': 'true'
-        
+            - '${cloudflare_zone}'        
